@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Login - Resume Management</title>
+
+  <!-- Font Awesome Icons -->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>
+
+  <!-- Plugin CSS -->
+  <link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
+
+  <!-- Theme CSS - Includes Bootstrap -->
+  <link href="css/creative.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top" class="bg-light py-5">
+
+  <!-- Contact Section -->
+  <section class="page-section" id="apply">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-4 text-center"> 
+          <h2 class="mt-0">Sign In</h2>
+          <hr class="card divider my-4">
+          <div class="text-left">
+            <form id="frmLogin">
+              <div id="alert_error_message" class="alert alert-danger collapse" role="alert">
+                  Incorrect username or password.
+                  <button type="button" class="close" data-dismiss="alert" aria-strong="Close">
+                   <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username*" maxlength="50">
+                <div id="username_error_message" class="text-danger"></div>
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password*" maxlength="50">
+                <div id="password_error_message" class="text-danger"></div>
+              </div>
+              <div class="form-group">
+                <button type="button" id="submit" class="btn btn-primary btn-block">Login</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/creative.min.js"></script>
+
+</body>
+
+</html>
+<script>
+  $(function() {
+
+      $('#submit').click(function(){
+        submit();
+      });
+
+      $(document).keypress(function(e) {
+        if(e.which == 13) {
+           submit();
+        }
+      });
+      
+      var error_username = false;
+      var error_password = false;
+
+      $("#username").focusout(function() {
+          check_username();
+      });
+      $("#password").focusout(function() {
+          check_password();
+      });
+
+      function check_username() {
+
+          if ($.trim($('#username').val()) == '') {
+              $("#username_error_message").html("Input is blank!");
+              $("#username_error_message").show();
+              error_username = true;
+          } else {
+              $("#username_error_message").hide();
+          }
+      }
+
+      function check_password() {
+
+          if ($.trim($('#password').val()) == '') {
+              $("#password_error_message").html("Input is blank!");
+              $("#password_error_message").show();
+              error_password = true;
+          } else {
+              $("#password_error_message").hide();
+          }
+      }
+
+
+      function submit(){
+
+      error_username = false;
+      error_password = false;
+
+      check_username();
+      check_password();
+
+      if (error_username == false && error_password == false) {
+
+        data=$('#frmLogin').serialize();
+
+        $.ajax({
+          type:"POST",
+          data:data,
+          url:"login.php",
+          success:function(data){
+            if(data==1){
+              window.location="resumesManagement.php";
+              $('#frmLogin')[0].reset();
+              $("#alert_error_message").hide();
+              }else{
+                $("#alert_error_message").show();
+              }
+            }
+          });
+          } else {
+              $("#alert_error_message").show();
+              return false;
+          }
+      }
+  });
+
+</script>
